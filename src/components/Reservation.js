@@ -13,7 +13,8 @@ class Reservation extends React.Component {
       this.handleNameChange = this.handleNameChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleShareholderNameChange = this.handleShareholderNameChange.bind(this);
-      this.addGuest = this.addGuest.bind(this)
+      this.addGuest = this.addGuest.bind(this);
+      this.removeGuest = this.removeGuest.bind(this);
     }
   
     handleInputChange(event) {
@@ -34,10 +35,8 @@ class Reservation extends React.Component {
       }
 
     addGuest(event) {
-        console.log("additionalGuests : ", this.state.additionalGuests);
         var newGuestList = this.state.additionalGuests;
         newGuestList.push('guest-' + this.state.additionalGuests.length)
-        console.log("newGuestList : " , newGuestList);
         this.setState({
             additionalGuests: newGuestList
         });
@@ -51,6 +50,13 @@ class Reservation extends React.Component {
     
         this.setState({ additionalGuests: newShareholders });
       }
+
+    removeGuest(event) {
+        var test = this.state.additionalGuests;
+        test.splice(parseInt(event.target.value), 1);
+        var removedGuest = test;
+        this.setState({additionalGuests : removedGuest});
+    }
 
     render() {
       return (
@@ -68,14 +74,20 @@ class Reservation extends React.Component {
             </div>
                 {this.state.additionalGuests.length > 0 ? this.state.additionalGuests.map((guest, idx) => {
                     return <div className="form-group" key={idx}>
-                        <label htmlFor="additionalGuests">{guest}</label>
+                        <label htmlFor="additionalGuests">Additional Guest</label>
+
+                        <div className="input-group">
                         <input
                             type="text"
-                            placeholder="work"
+                            placeholder="name"
                             className="form-control"
-                            value={guest[idx]}
+                            id={idx}
                             onChange={this.handleShareholderNameChange(idx)}
                         />
+                            <div className="input-group-addon"> 
+                                <i id={idx} className="fa fa-minus" aria-hidden="true" value={idx} onClick={this.removeGuest}></i>
+                            </div>
+                        </div>
                     </div>
                 }) : ''}
             <div className="form-check form-check-inline">
